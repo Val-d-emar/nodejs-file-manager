@@ -1,0 +1,29 @@
+{
+  "name": "nodejs-file-manager",
+  "version": "1.0.0",
+  "description": "Homework of https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/file-manager/assignment.md",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test:start": "node src/index.js --username=your_username"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Val-d-emar/nodejs-file-manager.git"
+  },
+  "keywords": [
+    "file",
+    "manager",
+    "node.js"
+  ],
+  "author": "https://github.com/Val-d-emar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Val-d-emar/nodejs-file-manager/issues"
+  },
+  "homepage": "https://github.com/Val-d-emar/nodejs-file-manager#readme"
+}
