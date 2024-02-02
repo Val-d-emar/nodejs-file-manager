@@ -3,6 +3,7 @@ import { EOL } from 'node:os';
 import { dbg, work_dir, emitErr } from './settings.js'
 import { ls } from './ls.js';
 import { cat } from './cat.js';
+import { add } from './add.js';
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -38,10 +39,13 @@ const read_tty = async () => {
                 dbg.log(`Operation: ${currentOperation}`);
                 ls();
             } else if (currentOperation.startsWith('cat')) {
-                let file = currentOperation.replace('cat ', '');
+                let filename = currentOperation.replace('cat ', '');
                 dbg.log(`Operation: ${currentOperation}`);
-                cat(file);
-
+                cat(filename);
+            } else if (currentOperation.startsWith('add')) {
+                let filename = currentOperation.replace('add ', '');
+                dbg.log(`Operation: ${currentOperation}`);
+                add(filename);
             } else {
                 emitErr(`Invalid input: ${data}`);
             }
