@@ -8,9 +8,12 @@ const add = async (filename) => {
         .on('error', err => {
             dbg.log(err);
             emitErr(`Operation failed`);
-        });
-    dbg.log('done');
-    pwd(work_dir.path());
+        })
+        .on('end', () => {
+            dbg.log('done');
+            pwd(work_dir.path());
+        }).end("");
+
 };
 export {
     add

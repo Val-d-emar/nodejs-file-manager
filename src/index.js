@@ -5,6 +5,7 @@ import { ls } from './ls.js';
 import { cat } from './cat.js';
 import { add } from './add.js';
 import { rn } from './rn.js';
+import { cp } from './cp.js';
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -30,7 +31,7 @@ const read_tty = async () => {
             if (currentOperation.startsWith('.exit')) {
                 process.exit(0);
             } else if (currentOperation.startsWith('up')) {
-                dbg.log(`Operation: ${currentOperation}`);                
+                dbg.log(`Operation: ${currentOperation}`);
                 work_dir.up();
             } else if (currentOperation.startsWith('cd ')) {
                 let dir = currentOperation.replace('cd ', '');
@@ -52,9 +53,19 @@ const read_tty = async () => {
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     rn(...filenames);
-                }                                
+                } else {
+                    emitErr(`Invalid input`);
+                }
+            } else if (currentOperation.startsWith('cp')) {
+                let filenames = currentOperation.replace('cp ', '').split(' ');
+                dbg.log(`Operation: ${currentOperation}`);
+                if (filenames.length > 1) {
+                    cp(...filenames);
+                } else {
+                    emitErr(`Invalid input`);
+                }
             } else {
-                emitErr(`Invalid input: ${data}`);
+                emitErr(`Invalid input`);
             }
         })
         .on('pwd', dir => {
