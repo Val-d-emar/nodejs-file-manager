@@ -9,7 +9,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test:start": "node src/index.js --username=your_username"
+    "test:start": "node src/index.js --username=your_username",
+    "settings": "node src/settings.js",
+    "ls": "node src/ls.js"
   },
   "repository": {
     "type": "git",
