@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { EOL } from 'node:os';
 
 // const DEBUGGING = true;
 const DEBUGGING = false;
@@ -46,7 +45,7 @@ class Working_directory {
         if (this._arr.length > 1) {
             this._arr.pop();
         } else {
-            emitErr(`Operation failed${EOL}`);
+            emitErr(`Operation failed`);
         }
         if (this._arr.length == 1 && this._arr[0] === '') {
             this._arr[0] = '/';
@@ -63,7 +62,7 @@ class Working_directory {
                 dbg.log(this.path());
             })
             .catch( err => {
-                emitErr(`Operation failed${EOL}`);
+                emitErr(`Operation failed`);
                 dbg.log(err);
             })
         pwd(this._path);

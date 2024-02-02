@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import { EOL } from 'node:os';
 import { dbg, pwd, emitErr, work_dir } from './settings.js'
 
 const ls = async (dir = work_dir.path()) => {
@@ -15,9 +14,9 @@ const ls = async (dir = work_dir.path()) => {
             }
             pwd(dir);
         })
-        .catch(_err => {
-            dbg.log(_err);
-            emitErr(`Operation failed${EOL}`);
+        .catch(err => {
+            dbg.log(err);
+            emitErr(`Operation failed`);
         });
 };
 

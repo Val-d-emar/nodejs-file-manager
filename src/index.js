@@ -2,6 +2,7 @@ import process from 'node:process';
 import { EOL } from 'node:os';
 import { dbg, work_dir, emitErr } from './settings.js'
 import { ls } from './ls.js';
+import { cat } from './cat.js';
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -33,9 +34,14 @@ const read_tty = async () => {
                 let dir = currentOperation.replace('cd ', '');
                 dbg.log(`Operation: ${currentOperation}`);
                 work_dir.cd(dir);
-            } else if (currentOperation.includes('ls')) {
+            } else if (currentOperation.startsWith('ls')) {
                 dbg.log(`Operation: ${currentOperation}`);
                 ls();
+            } else if (currentOperation.startsWith('cat')) {
+                let file = currentOperation.replace('cat ', '');
+                dbg.log(`Operation: ${currentOperation}`);
+                cat(file);
+
             } else {
                 emitErr(`Invalid input: ${data}`);
             }
@@ -44,7 +50,7 @@ const read_tty = async () => {
             console.log(`You are currently in ${dir}`);
         })
         .on('error', err => {
-            process.stdout.write(err.message);
+            console.log(err.message);
         });
 
     process.prependOnceListener('exit', code => {
