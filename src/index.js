@@ -4,6 +4,7 @@ import { dbg, work_dir, emitErr } from './settings.js'
 import { ls } from './ls.js';
 import { cat } from './cat.js';
 import { add } from './add.js';
+import { rn } from './rn.js';
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -46,6 +47,12 @@ const read_tty = async () => {
                 let filename = currentOperation.replace('add ', '');
                 dbg.log(`Operation: ${currentOperation}`);
                 add(filename);
+            } else if (currentOperation.startsWith('rn')) {
+                let filenames = currentOperation.replace('rn ', '').split(' ');
+                dbg.log(`Operation: ${currentOperation}`);
+                if (filenames.length > 1) {
+                    rn(...filenames);
+                }                                
             } else {
                 emitErr(`Invalid input: ${data}`);
             }
