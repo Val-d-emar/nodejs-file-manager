@@ -7,6 +7,7 @@ import { add } from './add.js';
 import { rn } from './rn.js';
 import { cp } from './cp.js';
 import { mv } from './mv.js';
+import { rm } from './rm.js';
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -34,13 +35,13 @@ const read_tty = async () => {
             } else if (currentOperation.startsWith('up')) {
                 dbg.log(`Operation: ${currentOperation}`);
                 work_dir.up();
+            } else if (currentOperation.startsWith('ls')) {
+                dbg.log(`Operation: ${currentOperation}`);
+                ls();
             } else if (currentOperation.startsWith('cd ')) {
                 let dir = currentOperation.replace(/^cd\s+/, '');
                 dbg.log(`Operation: ${currentOperation}`);
                 work_dir.cd(dir);
-            } else if (currentOperation.startsWith('ls')) {
-                dbg.log(`Operation: ${currentOperation}`);
-                ls();
             } else if (currentOperation.startsWith('cat')) {
                 let filename = currentOperation.replace(/^cat\s+/, '');
                 dbg.log(`Operation: ${currentOperation}`);
@@ -49,6 +50,10 @@ const read_tty = async () => {
                 let filename = currentOperation.replace(/^add\s+/, '');
                 dbg.log(`Operation: ${currentOperation}`);
                 add(filename);
+            } else if (currentOperation.startsWith('rm')) {
+                let filename = currentOperation.replace(/^rm\s+/, '');
+                dbg.log(`Operation: ${currentOperation}`);
+                rm(filename);                
             } else if (currentOperation.startsWith('rn')) {
                 let filenames = currentOperation.replace(/^rn\s+/, '')
                 .replace(/\s\s+/g, ' ').split(' ');
