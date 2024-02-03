@@ -20,7 +20,7 @@ const read_tty = async () => {
     if (process.argv.length > 2) {
         let val = process.argv[2];
         if (typeof (val) === 'string' && val.length > 2 && val.startsWith("--username=")) {
-            username = val.slice(11);
+            username = val.replace("--username=", '');
         } else {
             console.log(`Invalid input arg --username=`);
         }
@@ -39,6 +39,9 @@ const read_tty = async () => {
             } else if (currentOperation.startsWith('up')) {
                 dbg.log(`Operation: ${currentOperation}`);
                 work_dir.up();
+            } else if (currentOperation.startsWith('pwd')) {
+                dbg.log(`Operation: ${currentOperation}`);
+                work_dir.pwd();
             } else if (currentOperation.startsWith('ls')) {
                 dbg.log(`Operation: ${currentOperation}`);
                 ls();
@@ -101,7 +104,7 @@ const read_tty = async () => {
                     compress(...filenames);
                 } else {
                     emitErr(`Invalid input`);
-                }                
+                }
             } else if (currentOperation.startsWith('decompress')) {
                 let filenames = currentOperation.replace(/^decompress\s+/, '')
                     .replace(/\s\s+/g, ' ').split(' ');
@@ -110,7 +113,7 @@ const read_tty = async () => {
                     decompress(...filenames);
                 } else {
                     emitErr(`Invalid input`);
-                }                      
+                }
             } else {
                 emitErr(`Invalid input`);
             }
@@ -130,6 +133,19 @@ const read_tty = async () => {
     process.prependOnceListener("SIGINT", _code => {
         process.exit();
     });
+    if (process.argv.length > 2) {
+        for (let i = 2; i < process.argv.length; i++) {
+            let val = process.argv[i];
+            if (typeof (val) === 'string' && val.length > 2 && val.startsWith("--exec=")) {
+                setTimeout(() => {
+                    let cmd = val.replace("--exec=", '').replace(/_/g, ' ');
+                    console.log(cmd);
+                    process.stdin.emit("data", `${cmd}${EOL}`)
+                }, i * 200);
+
+            }
+        }
+    }
 
 };
 

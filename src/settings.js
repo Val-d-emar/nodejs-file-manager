@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const DEBUGGING = false
-    // || true; //comment it for debug out
+    // || true; //uncomment it to turn on debug out
 
 class Debug {
     debugging = false;

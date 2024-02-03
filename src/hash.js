@@ -1,8 +1,6 @@
 import fs from 'node:fs';
 import { dbg, emitErr, work_dir } from './settings.js'
 import path from 'node:path';
-// import stream from 'node:stream';
-// import process from 'node:process';
 import { createHash } from 'node:crypto';
 
 const hash = async (filename) => {
@@ -22,18 +20,6 @@ const hash = async (filename) => {
                     work_dir.pwd();
                 }
             });
-
-            // inp.on('close', () => {
-            //     console.log();
-            //     work_dir.pwd();
-            // })
-            //     .on('error', (err) => {
-            //         dbg.log(err);
-            //         emitErr(`Operation failed`);
-            //     })
-            //     .pipe(createHash('sha256'))
-            //     .setEncoding('hex')
-            //     .pipe(process.stdout);
         })
         .catch(err => {
             dbg.log(err);
