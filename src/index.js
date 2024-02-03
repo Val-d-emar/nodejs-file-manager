@@ -8,6 +8,7 @@ import { rn } from './rn.js';
 import { cp } from './cp.js';
 import { mv } from './mv.js';
 import { rm } from './rm.js';
+import { info } from './info.js';
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -53,7 +54,11 @@ const read_tty = async () => {
             } else if (currentOperation.startsWith('rm')) {
                 let filename = currentOperation.replace(/^rm\s+/, '');
                 dbg.log(`Operation: ${currentOperation}`);
-                rm(filename);                
+                rm(filename);        
+            } else if (currentOperation.startsWith('os')) {
+                let param = currentOperation.replace(/^os\s+--/, '');
+                dbg.log(`Operation: ${currentOperation}`);
+                info(param);           
             } else if (currentOperation.startsWith('rn')) {
                 let filenames = currentOperation.replace(/^rn\s+/, '')
                 .replace(/\s\s+/g, ' ').split(' ');
