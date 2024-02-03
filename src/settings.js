@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const DEBUGGING = false
-    || true; //comment it for debug out
+    // || true; //comment it for debug out
 
 class Debug {
     debugging = false;
@@ -17,8 +17,6 @@ class Debug {
 const dbg = new Debug();
 
 let emitErr = (err) => { process.stdin.emit('error', new Error(err)); };
-
-// let pwd = (dir) => { process.stdin.emit('pwd', dir); };
 
 class Working_directory {
     constructor(url = fileURLToPath(import.meta.url)) {
@@ -64,12 +62,13 @@ class Working_directory {
             .then((result) => {
                 dbg.log(this.arr(result));
                 dbg.log(this.path());
+                this.pwd();
             })
             .catch(err => {
                 emitErr(`Operation failed`);
                 dbg.log(err);
             });
-        this.pwd();
+        
     }
 }
 const work_dir = new Working_directory();

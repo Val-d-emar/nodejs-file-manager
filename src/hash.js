@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import { dbg, emitErr, work_dir } from './settings.js'
 import path from 'node:path';
-import stream from 'node:stream';
-import process from 'node:process';
+// import stream from 'node:stream';
+// import process from 'node:process';
 import { createHash } from 'node:crypto';
 
 const hash = async (filename) => {

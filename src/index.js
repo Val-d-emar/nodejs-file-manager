@@ -10,7 +10,8 @@ import { mv } from './mv.js';
 import { rm } from './rm.js';
 import { info } from './info.js';
 import { hash } from './hash.js';
-
+import { compress } from './compress.js';
+import { decompress } from './decompress.js';
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -92,6 +93,24 @@ const read_tty = async () => {
                 } else {
                     emitErr(`Invalid input`);
                 }
+            } else if (currentOperation.startsWith('compress')) {
+                let filenames = currentOperation.replace(/^compress\s+/, '')
+                    .replace(/\s\s+/g, ' ').split(' ');
+                dbg.log(`Operation: ${currentOperation}`);
+                if (filenames.length > 1) {
+                    compress(...filenames);
+                } else {
+                    emitErr(`Invalid input`);
+                }                
+            } else if (currentOperation.startsWith('decompress')) {
+                let filenames = currentOperation.replace(/^decompress\s+/, '')
+                    .replace(/\s\s+/g, ' ').split(' ');
+                dbg.log(`Operation: ${currentOperation}`);
+                if (filenames.length > 1) {
+                    decompress(...filenames);
+                } else {
+                    emitErr(`Invalid input`);
+                }                      
             } else {
                 emitErr(`Invalid input`);
             }
