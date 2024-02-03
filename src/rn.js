@@ -6,9 +6,9 @@ const rn = async (filenameSrc, filenameDst) => {
 
     await fs.promises.rename(path.resolve(work_dir.path(), filenameSrc),
         path.resolve(work_dir.path(), filenameDst))
-        .then(files => {
+        .then(_value => {
             dbg.log('done');
-            pwd(dir);
+            pwd(work_dir.path());
         })
         .catch(err => {
             dbg.log(err);

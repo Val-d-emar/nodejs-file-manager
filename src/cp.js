@@ -1,32 +1,32 @@
 import fs from 'node:fs';
 import { dbg, pwd, emitErr, work_dir } from './settings.js'
 import path from 'node:path';
+import stream from 'node:stream';
 
 const cp = async (filenameSrc, filenameDst) => {
 
-    // await fs.promises.copyFile(path.resolve(work_dir.path(), filenameSrc),
-    // path.resolve(work_dir.path(), filenameDst))
-    // .then(files => {
-    //     dbg.log('done');
-    //     pwd(dir);
-    // })
-    // .catch(err => {
-    //     dbg.log(err);
-    //     emitErr(`Operation failed`);
-    // });
+    let src = path.resolve(work_dir.path(), filenameSrc);
+    let dst = path.resolve(work_dir.path(), filenameDst);
 
-    fs.createReadStream(path.resolve(work_dir.path(), filenameSrc))
-        .on('error', err => {
-            dbg.log(err);
-            emitErr(`Operation failed`);
-        }).pipe(fs.createWriteStream(path.resolve(work_dir.path(), filenameDst)))
-        .on('error', err => {
-            dbg.log(err);
-            emitErr(`Operation failed`);
+    await fs.promises.access(src, fs.constants.R_OK)
+        .then(() => {
+            stream.pipeline(
+                fs.createReadStream(src),
+                fs.createWriteStream(dst, { flags: 'wx+' }),
+                (err) => {
+                    if (err) {
+                        dbg.log(err);
+                        emitErr(`Operation failed`);
+                    } else {
+                        dbg.log('done');
+                        pwd(work_dir.path());
+                    }
+                }
+            );
         })
-        .on('unpipe', () => {
-            dbg.log('done');
-            pwd(work_dir.path());
+        .catch(err => {
+            dbg.log(err);
+            emitErr(`Operation failed`);
         });
 
 };

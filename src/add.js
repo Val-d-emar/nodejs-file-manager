@@ -4,15 +4,16 @@ import { dbg, emitErr, pwd, work_dir } from './settings.js'
 
 const add = async (filename) => {
 
-    fs.createWriteStream(path.resolve(work_dir.path(), filename))
+    fs.createWriteStream(path.resolve(work_dir.path(), filename), {flags:'wx+'})
         .on('error', err => {
             dbg.log(err);
             emitErr(`Operation failed`);
         })
-        .on('end', () => {
+        .on('finish', () => {
             dbg.log('done');
             pwd(work_dir.path());
-        }).end("");
+        })        
+        .end();
 
 };
 export {

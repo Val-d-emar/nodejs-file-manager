@@ -3,8 +3,8 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-// const DEBUGGING = true;
-const DEBUGGING = false;
+const DEBUGGING = false
+    || true; //comment it for debug out
 
 class Debug {
     debugging = false;
@@ -29,7 +29,7 @@ class Working_directory {
     path = (arg = this._arr) => {
         if (arg.length == 1 && arg[0] === '') {
             arg[0] = '/';
-        }    
+        }
         this._path = arg.join(path.sep);
         this._arr = arg;
         return this._path;
@@ -49,7 +49,7 @@ class Working_directory {
         }
         if (this._arr.length == 1 && this._arr[0] === '') {
             this._arr[0] = '/';
-        }    
+        }
         pwd(this.path());
         return this._path;
     }
@@ -61,7 +61,7 @@ class Working_directory {
                 dbg.log(this.arr(result));
                 dbg.log(this.path());
             })
-            .catch( err => {
+            .catch(err => {
                 emitErr(`Operation failed`);
                 dbg.log(err);
             })

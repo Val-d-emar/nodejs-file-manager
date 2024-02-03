@@ -1,6 +1,6 @@
 import process from 'node:process';
 import { EOL } from 'node:os';
-import { dbg, work_dir, emitErr } from './settings.js'
+import { dbg, pwd, work_dir, emitErr } from './settings.js'
 import { ls } from './ls.js';
 import { cat } from './cat.js';
 import { add } from './add.js';
@@ -73,14 +73,15 @@ const read_tty = async () => {
         })
         .on('error', err => {
             console.log(err.message);
+            pwd(work_dir.path());
         });
 
     process.prependOnceListener('exit', code => {
         console.log(`${EOL}Thank you for using File Manager, ${username}, goodbye!`);
         return code;
     });
-    process.prependOnceListener("SIGINT", code => {
-        process.exit(0);
+    process.prependOnceListener("SIGINT", _code => {
+        process.exit();
     });
 
 };
