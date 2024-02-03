@@ -9,6 +9,8 @@ import { cp } from './cp.js';
 import { mv } from './mv.js';
 import { rm } from './rm.js';
 import { info } from './info.js';
+import { hash } from './hash.js';
+
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -59,6 +61,10 @@ const read_tty = async () => {
                 let param = currentOperation.replace(/^os\s+--/, '');
                 dbg.log(`Operation: ${currentOperation}`);
                 info(param);
+            } else if (currentOperation.startsWith('hash')) {
+                let filename = currentOperation.replace(/^hash\s+/, '');
+                dbg.log(`Operation: ${currentOperation}`);
+                hash(filename);
             } else if (currentOperation.startsWith('rn')) {
                 let filenames = currentOperation.replace(/^rn\s+/, '')
                     .replace(/\s\s+/g, ' ').split(' ');

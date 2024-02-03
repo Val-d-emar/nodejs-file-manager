@@ -27,7 +27,8 @@ class Working_directory {
         this._lastOperation = 'pwd';
     };
     pwd = () => {
-        process.stdin.emit('pwd', this.path());
+        this.path();
+        process.stdin.emit('pwd', this._path);
     };
     path = (arg = this._arr) => {
         if (arg.length == 1 && arg[0] === '') {

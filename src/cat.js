@@ -5,15 +5,15 @@ import { dbg, emitErr, work_dir } from './settings.js'
 
 const cat = async (filename) => {
     fs.createReadStream(path.resolve(work_dir.path(), filename))
+        .on('close', () => {
+            console.log();
+            work_dir.pwd();
+        })
         .on('error', err => {
             dbg.log(err);
             emitErr(`Operation failed`);
         })
-        .pipe(process.stdout)
-        .on('unpipe', () => {
-            console.log();
-            work_dir.pwd();
-        });
+        .pipe(process.stdout);
 };
 export {
     cat
