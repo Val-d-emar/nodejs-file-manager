@@ -1,6 +1,6 @@
 import process from 'node:process';
 import { EOL } from 'node:os';
-import { dbg, pwd, work_dir, emitErr } from './settings.js'
+import { dbg, work_dir, emitErr } from './settings.js'
 import { ls } from './ls.js';
 import { cat } from './cat.js';
 import { add } from './add.js';
@@ -54,14 +54,14 @@ const read_tty = async () => {
             } else if (currentOperation.startsWith('rm')) {
                 let filename = currentOperation.replace(/^rm\s+/, '');
                 dbg.log(`Operation: ${currentOperation}`);
-                rm(filename);        
+                rm(filename);
             } else if (currentOperation.startsWith('os')) {
                 let param = currentOperation.replace(/^os\s+--/, '');
                 dbg.log(`Operation: ${currentOperation}`);
-                info(param);           
+                info(param);
             } else if (currentOperation.startsWith('rn')) {
                 let filenames = currentOperation.replace(/^rn\s+/, '')
-                .replace(/\s\s+/g, ' ').split(' ');
+                    .replace(/\s\s+/g, ' ').split(' ');
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     rn(...filenames);
@@ -70,7 +70,7 @@ const read_tty = async () => {
                 }
             } else if (currentOperation.startsWith('cp')) {
                 let filenames = currentOperation.replace(/^cp\s+/, '')
-                .replace(/\s\s+/g, ' ').split(' ');
+                    .replace(/\s\s+/g, ' ').split(' ');
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     cp(...filenames);
@@ -95,7 +95,7 @@ const read_tty = async () => {
         })
         .on('error', err => {
             console.log(err.message);
-            pwd(work_dir.path());
+            work_dir.pwd();
         });
 
     process.prependOnceListener('exit', code => {

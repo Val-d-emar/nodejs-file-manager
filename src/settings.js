@@ -18,13 +18,16 @@ const dbg = new Debug();
 
 let emitErr = (err) => { process.stdin.emit('error', new Error(err)); };
 
-let pwd = (dir) => { process.stdin.emit('pwd', dir); };
+// let pwd = (dir) => { process.stdin.emit('pwd', dir); };
 
 class Working_directory {
     constructor(url = fileURLToPath(import.meta.url)) {
         this._path = path.normalize(path.dirname(url)).toString();
         this._arr = this.arr(this._path);
         this._lastOperation = 'pwd';
+    };
+    pwd = () => {
+        process.stdin.emit('pwd', this.path());
     };
     path = (arg = this._arr) => {
         if (arg.length == 1 && arg[0] === '') {
@@ -50,7 +53,7 @@ class Working_directory {
         if (this._arr.length == 1 && this._arr[0] === '') {
             this._arr[0] = '/';
         }
-        pwd(this.path());
+        this.pwd();
         return this._path;
     }
     cd = async (path_to) => {
@@ -65,7 +68,7 @@ class Working_directory {
                 emitErr(`Operation failed`);
                 dbg.log(err);
             });
-        pwd(this._path);
+        this.pwd();
     }
 }
 const work_dir = new Working_directory();
@@ -73,6 +76,5 @@ const work_dir = new Working_directory();
 export {
     dbg,
     emitErr,
-    pwd,
     work_dir,
 };

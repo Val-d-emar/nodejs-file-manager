@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { dbg, pwd, emitErr, work_dir } from './settings.js'
+import { dbg, emitErr, work_dir } from './settings.js'
 import path from 'node:path';
 import stream from 'node:stream';
 
@@ -19,7 +19,7 @@ const cp = async (filenameSrc, filenameDst) => {
                         emitErr(`Operation failed`);
                     } else {
                         dbg.log('done');
-                        pwd(work_dir.path());
+                        work_dir.pwd();
                     }
                 }
             );

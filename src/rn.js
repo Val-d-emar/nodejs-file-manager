@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { dbg, pwd, emitErr, work_dir } from './settings.js'
+import { dbg, emitErr, work_dir } from './settings.js'
 import path from 'node:path';
 
 const rn = async (filenameSrc, filenameDst) => {
@@ -8,7 +8,7 @@ const rn = async (filenameSrc, filenameDst) => {
         path.resolve(work_dir.path(), filenameDst))
         .then(_value => {
             dbg.log('done');
-            pwd(work_dir.path());
+            work_dir.pwd();
         })
         .catch(err => {
             dbg.log(err);
