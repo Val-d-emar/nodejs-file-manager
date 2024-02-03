@@ -64,7 +64,7 @@ class Working_directory {
             .catch(err => {
                 emitErr(`Operation failed`);
                 dbg.log(err);
-            })
+            });
         pwd(this._path);
     }
 }

@@ -6,6 +6,7 @@ import { cat } from './cat.js';
 import { add } from './add.js';
 import { rn } from './rn.js';
 import { cp } from './cp.js';
+import { mv } from './mv.js';
 
 const read_tty = async () => {
     dbg.log(work_dir.path());
@@ -34,22 +35,23 @@ const read_tty = async () => {
                 dbg.log(`Operation: ${currentOperation}`);
                 work_dir.up();
             } else if (currentOperation.startsWith('cd ')) {
-                let dir = currentOperation.replace('cd ', '');
+                let dir = currentOperation.replace(/^cd\s+/, '');
                 dbg.log(`Operation: ${currentOperation}`);
                 work_dir.cd(dir);
             } else if (currentOperation.startsWith('ls')) {
                 dbg.log(`Operation: ${currentOperation}`);
                 ls();
             } else if (currentOperation.startsWith('cat')) {
-                let filename = currentOperation.replace('cat ', '');
+                let filename = currentOperation.replace(/^cat\s+/, '');
                 dbg.log(`Operation: ${currentOperation}`);
                 cat(filename);
             } else if (currentOperation.startsWith('add')) {
-                let filename = currentOperation.replace('add ', '');
+                let filename = currentOperation.replace(/^add\s+/, '');
                 dbg.log(`Operation: ${currentOperation}`);
                 add(filename);
             } else if (currentOperation.startsWith('rn')) {
-                let filenames = currentOperation.replace('rn ', '').split(' ');
+                let filenames = currentOperation.replace(/^rn\s+/, '')
+                .replace(/\s\s+/g, ' ').split(' ');
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     rn(...filenames);
@@ -57,10 +59,20 @@ const read_tty = async () => {
                     emitErr(`Invalid input`);
                 }
             } else if (currentOperation.startsWith('cp')) {
-                let filenames = currentOperation.replace('cp ', '').split(' ');
+                let filenames = currentOperation.replace(/^cp\s+/, '')
+                .replace(/\s\s+/g, ' ').split(' ');
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     cp(...filenames);
+                } else {
+                    emitErr(`Invalid input`);
+                }
+            } else if (currentOperation.startsWith('mv')) {
+                let filenames = currentOperation.replace(/^mv\s+/, '')
+                    .replace(/\s\s+/g, ' ').split(' ');
+                dbg.log(`Operation: ${currentOperation}`);
+                if (filenames.length > 1) {
+                    mv(...filenames);
                 } else {
                     emitErr(`Invalid input`);
                 }
