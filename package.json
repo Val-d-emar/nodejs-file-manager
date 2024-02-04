@@ -1,0 +1,47 @@
+{
+  "name": "nodejs-file-manager",
+  "version": "1.0.0",
+  "description": "Homework of https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/file-manager/assignment.md",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test:start": "node src/index.js --username=your_username",
+    "test:up": "node src/index.js --username=your_username --exec=up --exec=.exit",
+    "test:cd": "node src/index.js --username=your_username --exec=cd_.. --exec=.exit",
+    "test:ls": "node src/index.js --username=your_username --exec=ls --exec=.exit",       
+    "test:cat": "node src/index.js --username=your_username --dir=src --exec=cat_ls.js --exec=.exit",
+    "test:add": "node src/index.js --username=your_username --dir=src --exec=add_111 --exec=.exit",
+    "test:rn": "node src/index.js --username=your_username --dir=src --exec=rn_111_222 --exec=.exit",
+    "test:cp": "node src/index.js --username=your_username --dir=src --exec=cp_222_../ --exec=.exit",
+    "test:rm": "node src/index.js --username=your_username --dir=src --exec=rm_222 --exec=.exit",    
+    "test:mv": "node src/index.js --username=your_username --dir=src --exec=mv_../222_./ --exec=.exit",
+    "test:os--EOL": "node src/index.js --username=your_username --exec=os_--EOL --exec=.exit",
+    "test:os--cpus": "node src/index.js --username=your_username --exec=os_--cpus --exec=.exit",
+    "test:os--homedir": "node src/index.js --username=your_username --exec=os_--homedir --exec=.exit",
+    "test:os--username": "node src/index.js --username=your_username --exec=os_--username --exec=.exit",    
+    "test:os--architecture": "node src/index.js --username=your_username --exec=os_--architecture --exec=.exit",         
+    "test:hash": "node src/index.js --username=your_username --dir=src --exec=hash_ls.js --exec=.exit",
+    "test:compress": "node src/index.js --username=your_username --dir=src --exec=compress_ls.js_ls.bz --exec=.exit",
+    "test:decompress": "node src/index.js --username=your_username --dir=src --exec=decompress_ls.bz_ls.out --exec=.exit",    
+    "test:exit": "node src/index.js --username=your_username --exec=.exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Val-d-emar/nodejs-file-manager.git"
+  },
+  "keywords": [
+    "file",
+    "manager",
+    "node.js"
+  ],
+  "author": "https://github.com/Val-d-emar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Val-d-emar/nodejs-file-manager/issues"
+  },
+  "homepage": "https://github.com/Val-d-emar/nodejs-file-manager#readme"
+}
