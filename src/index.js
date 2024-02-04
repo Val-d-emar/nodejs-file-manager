@@ -1,5 +1,7 @@
 import process from 'node:process';
+import path from 'node:path';
 import { EOL } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { dbg, work_dir, emitErr } from './settings.js'
 import { ls } from './ls.js';
 import { cat } from './cat.js';
@@ -13,16 +15,52 @@ import { hash } from './hash.js';
 import { compress } from './compress.js';
 import { decompress } from './decompress.js';
 
+function filter1par(currentOperation, begin = new RegExp("^\\w+\\s+", 'u')) {
+    let params = currentOperation.replace(begin, '').replace(/\s\s+/g, ' ').trim();
+    return params.startsWith('"') ? params
+        .replace(/^"/, '').replace(/"$/, '')
+        : params.startsWith("'") ? params
+            .replace(/^'/, '').replace(/'$/, '')
+            : params.startsWith("`") ? params
+                .replace(/^`/, '').replace(/`$/, '')
+                : params;
+}
+
+function filter2par(currentOperation, begin = new RegExp("^\\w+\\s+", 'u')) {
+    let params = currentOperation.replace(begin, '').replace(/\s\s+/g, ' ').trim();
+    return params.startsWith('"') ? params
+        .split('" "').map(a => a.replace(/^"/, '').replace(/"$/, ''))
+        : params.startsWith("'") ? params
+            .split("' '").map(a => a.replace(/^'/, '').replace(/'$/, ''))
+            : params.startsWith("`") ? params
+                .split("` `").map(a => a.replace(/^`/, '').replace(/`$/, ''))
+                : params.split(' ');
+}
+
 const read_tty = async () => {
     dbg.log(work_dir.path());
     let currentOperation = '';
     let username = 'Anonymous';
     if (process.argv.length > 2) {
-        let val = process.argv[2];
-        if (typeof (val) === 'string' && val.length > 2 && val.startsWith("--username=")) {
-            username = val.replace("--username=", '');
-        } else {
-            console.log(`Invalid input arg --username=`);
+        for (let i = 2; i < process.argv.length; i++) {
+            let val = process.argv[i];
+            if (typeof (val) === 'string' && val.length > 2 && val.startsWith("--username=")) {
+                username = val.replace("--username=", '');
+            }
+            if (typeof (val) === 'string' && val.length > 2 && val.startsWith("--dir=src")) {
+                try {
+                    work_dir.arr(path.normalize(path.dirname(fileURLToPath(import.meta.url))));                    
+                } catch {
+                    work_dir.arr(path.resolve('./src'));
+                }
+            }            
+            if (typeof (val) === 'string' && val.length > 2 && val.startsWith("--exec=")) {
+                setTimeout(() => {
+                    let cmd = val.replace("--exec=", '').replace(/_/g, ' ');
+                    console.log(cmd);
+                    process.stdin.emit("data", `${cmd}${EOL}`)
+                }, i * 200);
+            }
         }
     } else {
         console.log(`Invalid input args`);
@@ -46,68 +84,63 @@ const read_tty = async () => {
                 dbg.log(`Operation: ${currentOperation}`);
                 ls();
             } else if (currentOperation.startsWith('cd ')) {
-                let dir = currentOperation.replace(/^cd\s+/, '');
+                let dir = filter1par(currentOperation);;
                 dbg.log(`Operation: ${currentOperation}`);
                 work_dir.cd(dir);
-            } else if (currentOperation.startsWith('cat')) {
-                let filename = currentOperation.replace(/^cat\s+/, '');
+            } else if (currentOperation.startsWith('cat ')) {
+                let filename = filter1par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 cat(filename);
-            } else if (currentOperation.startsWith('add')) {
-                let filename = currentOperation.replace(/^add\s+/, '');
+            } else if (currentOperation.startsWith('add ')) {
+                let filename = filter1par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 add(filename);
-            } else if (currentOperation.startsWith('rm')) {
-                let filename = currentOperation.replace(/^rm\s+/, '');
+            } else if (currentOperation.startsWith('rm ')) {
+                let filename = filter1par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 rm(filename);
-            } else if (currentOperation.startsWith('os')) {
-                let param = currentOperation.replace(/^os\s+--/, '');
+            } else if (currentOperation.startsWith('os ')) {
+                let param = filter1par(currentOperation, /^os\s+--/);
                 dbg.log(`Operation: ${currentOperation}`);
                 info(param);
-            } else if (currentOperation.startsWith('hash')) {
-                let filename = currentOperation.replace(/^hash\s+/, '');
+            } else if (currentOperation.startsWith('hash ')) {
+                let filename = filter1par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 hash(filename);
-            } else if (currentOperation.startsWith('rn')) {
-                let filenames = currentOperation.replace(/^rn\s+/, '')
-                    .replace(/\s\s+/g, ' ').split(' ');
+            } else if (currentOperation.startsWith('rn ')) {
+                let filenames = filter2par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     rn(...filenames);
                 } else {
                     emitErr(`Invalid input`);
                 }
-            } else if (currentOperation.startsWith('cp')) {
-                let filenames = currentOperation.replace(/^cp\s+/, '')
-                    .replace(/\s\s+/g, ' ').split(' ');
+            } else if (currentOperation.startsWith('cp ')) {
+                let filenames = filter2par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     cp(...filenames);
                 } else {
                     emitErr(`Invalid input`);
                 }
-            } else if (currentOperation.startsWith('mv')) {
-                let filenames = currentOperation.replace(/^mv\s+/, '')
-                    .replace(/\s\s+/g, ' ').split(' ');
+            } else if (currentOperation.startsWith('mv ')) {
+                let filenames = filter2par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     mv(...filenames);
                 } else {
                     emitErr(`Invalid input`);
                 }
-            } else if (currentOperation.startsWith('compress')) {
-                let filenames = currentOperation.replace(/^compress\s+/, '')
-                    .replace(/\s\s+/g, ' ').split(' ');
+            } else if (currentOperation.startsWith('compress ')) {
+                let filenames = filter2par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     compress(...filenames);
                 } else {
                     emitErr(`Invalid input`);
                 }
-            } else if (currentOperation.startsWith('decompress')) {
-                let filenames = currentOperation.replace(/^decompress\s+/, '')
-                    .replace(/\s\s+/g, ' ').split(' ');
+            } else if (currentOperation.startsWith('decompress ')) {
+                let filenames = filter2par(currentOperation);
                 dbg.log(`Operation: ${currentOperation}`);
                 if (filenames.length > 1) {
                     decompress(...filenames);
@@ -133,19 +166,6 @@ const read_tty = async () => {
     process.prependOnceListener("SIGINT", _code => {
         process.exit();
     });
-    if (process.argv.length > 2) {
-        for (let i = 2; i < process.argv.length; i++) {
-            let val = process.argv[i];
-            if (typeof (val) === 'string' && val.length > 2 && val.startsWith("--exec=")) {
-                setTimeout(() => {
-                    let cmd = val.replace("--exec=", '').replace(/_/g, ' ');
-                    console.log(cmd);
-                    process.stdin.emit("data", `${cmd}${EOL}`)
-                }, i * 200);
-
-            }
-        }
-    }
 
 };
 

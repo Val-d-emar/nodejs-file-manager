@@ -3,10 +3,10 @@ import { dbg, emitErr, work_dir } from './settings.js'
 import path from 'node:path';
 import stream from 'node:stream';
 
-const cp = async (filenameSrc, filenameDst) => {
+const cp = async (filenameSrc, dirnameDst) => {
 
     let src = path.resolve(work_dir.path(), filenameSrc);
-    let dst = path.resolve(work_dir.path(), filenameDst);
+    let dst = path.resolve(work_dir.path(), dirnameDst, path.basename(filenameSrc));
 
     await fs.promises.access(src, fs.constants.R_OK)
         .then(() => {

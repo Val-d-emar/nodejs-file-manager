@@ -1,7 +1,28 @@
 1. Task: [File Manager](https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/file-manager/assignment.md)  
 2. Done 03.02.2024 / deadline 06.02.2024  
 3. Score: 330 / 330  
-  
+   
+# NOTES  
+For to use even a once path with whitespace symbols in the parameters of operations divided by spaces you should place both paths in the same kind of quotes.  
+Examples: 
+```bash
+cp 'file to copy.txt' './dir to copy/'
+rn "file to rename.txt" "new name.txt"
+mv `file.txt` `./dir to move/`
+```  
+For to use quotes and spaces in path place this filename inside another kind of quotes.  
+Examples (**NOTE: in Windows you can't use some kinds of quotes in filenames**):  
+```bash
+cp 'file"my super name".txt' './dir to copy/'
+rn "file'my crazy dream'" "new_name.txt"
+mv `my "super 'crazy'"file."txt"` `./folder/`
+```  
+You can using any paths without quotes in the operations with one parameter but any quotes in the begin and in the end of parameter will be ignored.  
+Examples (showed the one same path name below):  
+```bash
+cat `my "super 'crazy'"file."txt"`
+cat my "super 'crazy'"file."txt"
+```  
 # Scoring: File Manager  
 ## Basic Scope  
 - General  
@@ -39,3 +60,8 @@
 [x] **+20** No synchronous Node.js API with asynchronous analogues is used (e.g. not used `readFileSync` instead of `readFile`)  
 [x] **+20** Codebase is written in ESM modules instead of CommonJS  
 [x] **+20** Codebase is separated (at least 7 modules)  
+
+# Tested on  
+[x]  Linux 5.10.0 + Node.js 20.11.0  
+[x]  Wine 8.0.2 + Node.js 20.11.0  
+[-]  Windows  

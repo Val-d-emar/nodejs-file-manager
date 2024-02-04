@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import process from 'node:process';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import os from 'node:os';
 
 const DEBUGGING = false
-    // || true; //uncomment it to turn on debug out
+// || true; //uncomment it to turn on debug out
 
 class Debug {
     debugging = false;
@@ -19,8 +19,12 @@ const dbg = new Debug();
 let emitErr = (err) => { process.stdin.emit('error', new Error(err)); };
 
 class Working_directory {
-    constructor(url = fileURLToPath(import.meta.url)) {
-        this._path = path.normalize(path.dirname(url)).toString();
+    constructor(url = `${os.homedir()}`) {
+        try {
+            this._path = path.normalize(url);
+        } catch {
+            this._path = path.resolve('./');
+        }
         this._arr = this.arr(this._path);
         this._lastOperation = 'pwd';
     };
@@ -46,13 +50,14 @@ class Working_directory {
     up = () => {
         if (this._arr.length > 1) {
             this._arr.pop();
+            this.pwd();
         } else {
             emitErr(`Operation failed`);
         }
         if (this._arr.length == 1 && this._arr[0] === '') {
             this._arr[0] = '/';
-        }
-        this.pwd();
+            this.pwd();
+        }        
         return this._path;
     }
     cd = async (path_to) => {
@@ -65,10 +70,10 @@ class Working_directory {
                 this.pwd();
             })
             .catch(err => {
-                emitErr(`Operation failed`);
                 dbg.log(err);
+                emitErr(`Operation failed`);
             });
-        
+
     }
 }
 const work_dir = new Working_directory();

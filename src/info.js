@@ -13,7 +13,7 @@ const info = async (param) => {
             }
             case "EOL": {
                 let eol = os.EOL;
-                console.log(`EOL: ${eol.replace("\n", "LF").replace("\r", "CR")}`);
+                console.log(`${eol.replace("\n", "LF").replace("\r", "CR")}`);
                 console.log(eol);
                 work_dir.pwd();
                 break;
